@@ -1,3 +1,4 @@
+
 name: Build Strawberry Studio for Windows
 
 on:
@@ -19,11 +20,14 @@ jobs:
           python-version: '3.12'
 
       - name: Install dependencies
+        working-directory: Strawberry_Studio
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
+          python -m pip install pyinstaller
 
       - name: Build standalone EXE
+        working-directory: Strawberry_Studio
         run: |
           python -m PyInstaller --noconfirm --clean --onefile --windowed --name StrawberryStudio --add-data "overlay.html;." --hidden-import websocket --hidden-import obsws_python app.py
 
@@ -31,6 +35,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: StrawberryStudio-Windows
-          path: dist/StrawberryStudio.exe
+          path: Strawberry_Studio/dist/StrawberryStudio.exe
           if-no-files-found: error
           retention-days: 14
